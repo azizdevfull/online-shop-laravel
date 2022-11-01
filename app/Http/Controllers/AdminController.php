@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
-
+// use Barryvdh\DomPDF\PDF;
+// use PDF;
 class AdminController extends Controller
 {
     public function view_category()
@@ -151,6 +153,18 @@ class AdminController extends Controller
         $order->save();
 
         return redirect()->back();
+    }
+
+    public function print_pdf($id)
+    {
+
+        $order = Order::find($id);
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('admin.pdf', compact('order'));
+
+        return $pdf->download('order_details.pdf');
+
     }
 
 }
