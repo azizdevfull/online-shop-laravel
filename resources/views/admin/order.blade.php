@@ -44,6 +44,18 @@
 
                 <h1 class="title_deg">All Orders</h1>
 
+                <div align="center" style=" padding-bottom: 30px;">
+                
+                    <form action="{{ url('search') }}" method="GET">
+                        @csrf
+                        <input style="color: black;" type="text" name="search" placeholder="Search...">
+                    
+                    <input type="submit" value="Search" class="btn btn-primary">
+                    </form>
+                
+                </div>
+
+
                 <table class="table_deg">
                     <tr class="th_deg">
                         <th style="padding: 10px;">Name</th>
