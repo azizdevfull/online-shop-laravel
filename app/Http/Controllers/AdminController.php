@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
+use App\Notifications\SendEmailNotification;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+
 // use Barryvdh\DomPDF\PDF;
 // use PDF;
 class AdminController extends Controller
@@ -165,6 +168,32 @@ class AdminController extends Controller
 
         return $pdf->download('order_details.pdf');
 
+    }
+
+    public function send_email($id)
+    {
+        $order = Order::find($id);
+        return view('admin.email_info', compact('order'));
+    }
+
+    public function send_user_email(Request $request,$id)
+    {
+        $order = Order::find($id);
+
+        $details = [
+
+            'greeting' => $request->greeting,
+            'firstline' => $request->firstline,
+            'body' => $request->body,
+            'button' => $request->button,
+            'url' => $request->url,
+            'lastline' => $request->lastline,
+
+        ];
+
+        Notification::send($order, new SendEmailNotification($details));
+
+        return redirect()->back();
     }
 
 }
