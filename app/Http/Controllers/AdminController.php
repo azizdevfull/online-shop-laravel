@@ -201,7 +201,7 @@ class AdminController extends Controller
 
         $searchText = $request->search;
 
-        $order = Order::where('name', 'LIKE', "%$searchText%")->get();
+        $order = Order::where('name', 'LIKE', "%$searchText%")->orWhere('phone', 'LIKE', "%$searchText%")->orWhere('product_title', 'LIKE', "%$searchText%");
 
         return view('admin.order', compact('order'));
 
