@@ -74,7 +74,7 @@
 
 
                     </tr>
-                    @foreach ($order as $order)
+                    @forelse ($order as $order)
                         
                     <tr >
                         <td>{{$order->name}}</td>
@@ -114,7 +114,15 @@
 
                     </tr>
 
-                    @endforeach
+                    @empty
+
+
+                    <tr>
+                        <td colspan="13">
+                            Data Not Found
+                        </td>
+                    </tr>
+                    @endforelse
                 </table>
             
             </div>
