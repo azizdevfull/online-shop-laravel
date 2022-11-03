@@ -51,10 +51,11 @@
       <div style="text-align: center; padding-bottom: 30px; ">
          <h1 style="font-size: 30px; text-align: center; padding-top: 20px; padding-bottom: 20px;">Comments</h1>
       
-         <form action="">
-            <textarea style="height: 150px; width: 600px;" placeholder="Comment..."></textarea>
+         <form action="{{ url('add_comment') }}" method="POST">
+            @csrf
+            <textarea style="height: 150px; width: 600px;" placeholder="Comment..." name="comment"></textarea>
             <br>
-            <a href="" class="btn btn-primary">Comment</a>
+            <input type="submit" class="btn btn-primary" value="Comment">
          </form>
       
       </div>
@@ -62,36 +63,53 @@
       <div style="padding-left: 20%;">
          <h1 style="font-size: 20px; padding-bottom: 20px;">All Comments</h1>
          
-
+         @foreach ($comment as $comment)
+             
          <div>
-            <b>Aziz</b>
-            <p>This Is My comment</p>
+            <b>{{ $comment->name }}</b>
+            <p>{{ $comment->comment }}</p>
+            
+            <a style="color: blue;" href="javascript::void(0);" onclick="reply(this)" data-Commentid="{{ $comment->id }}">Reply</a>
+        @foreach ($reply as $rep)
+            @if ($rep->comment_id == $comment->id)
+                
+            <div style="padding-left: 3%; padding-bottom: 10px; padding-bottom: 10px;">
+               
+               <b>{{ $rep->name }}</b>
+               <p>{{ $rep->reply }}</p>
 
-            <a style="color: blue;" href="javascript::void(0);" onclick="reply(this)">Reply</a>
+            <a style="color: blue;" href="javascript::void(0);" onclick="reply(this)" data-Commentid="{{ $comment->id }}">Reply</a>
+
+
+            </div>
+            @endif
+      @endforeach
+        
          </div>
+         @endforeach
+
+         {{-- Reply TextBox --}}
 
          
-         <div>
-            <b>Yamin</b>
-            <p>This Is My 1  comment</p>
+         <div style="display: none;" class="replyDiv">
 
-            <a style="color: blue;" href="javascript::void(0);" onclick="reply(this)">Reply</a>
-         </div>
+         <form action="{{ url('add_reply') }}" method="POST">
+            @csrf
 
-         
-         <div>
-            <b>Said</b>
-            <p>This Is My  2 comment</p>
-
-            <a style="color: blue;" href="javascript::void(0);" onclick="reply(this)">Reply</a>
-         </div>
-
-         
-      <div style="display: none;" class="replyDiv">
-         <textarea style="height: 100px; width: 500px;" placeholder="Write..."></textarea>
-         <br>
-         <a href="" class="btn btn-primary">Reply</a>
+               <input type="text" id="commentId" name="commentId" hidden>
+               <textarea style="height: 100px; width: 500px;" name="reply" placeholder="Write..."></textarea>
+               
+               <br>
+               <button type="submit" class="btn btn-warning">
+                  Reply
+               </button >
+               <a href="javascript::void(0);" class="btn " onclick="reply_close(this)">Close</a>
+               
+            </form>
       </div>
+
+         {{-- End Reply TextBox --}}
+
       
       </div>
 
@@ -120,10 +138,33 @@
       <script>
          function reply(caller)
          {
+            document.getElementById('commentId').value=$(caller).attr('data-Commentid');
             $('.replyDiv').insertAfter($(caller));
             $('.replyDiv').show();
          }
+
+
+         function reply_close(caller)
+         {
+            $('.replyDiv').hide();
+         }
+
+
       </script>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function (event) {
+       var scrollpos = sessionStorage.getItem('scrollpos');
+       if (scrollpos) {
+           window.scrollTo(0, scrollpos);
+           sessionStorage.removeItem('scrollpos');
+       }
+   });
+
+   window.addEventListener("beforeunload", function (e) {
+       sessionStorage.setItem('scrollpos', window.scrollY);
+   });
+</script>
 
       <!-- jQery -->
       <script src="home/js/jquery-3.4.1.min.js"></script>
