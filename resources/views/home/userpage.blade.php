@@ -153,17 +153,14 @@
       </script>
 
 <script>
-   document.addEventListener("DOMContentLoaded", function (event) {
-       var scrollpos = sessionStorage.getItem('scrollpos');
-       if (scrollpos) {
-           window.scrollTo(0, scrollpos);
-           sessionStorage.removeItem('scrollpos');
-       }
+   document.addEventListener("DOMContentLoaded", function(event) { 
+       var scrollpos = localStorage.getItem('scrollpos');
+       if (scrollpos) window.scrollTo(0, scrollpos);
    });
 
-   window.addEventListener("beforeunload", function (e) {
-       sessionStorage.setItem('scrollpos', window.scrollY);
-   });
+   window.onbeforeunload = function(e) {
+       localStorage.setItem('scrollpos', window.scrollY);
+   };
 </script>
 
       <!-- jQery -->
