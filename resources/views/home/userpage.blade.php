@@ -20,6 +20,8 @@
       <link href="home/css/style.css" rel="stylesheet" />
       <!-- responsive style -->
       <link href="home/css/responsive.css" rel="stylesheet" />
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
    </head>
    <body>
       <div class="hero_area">
@@ -42,6 +44,62 @@
       @include('home.product')
       <!-- end product section -->
 
+
+
+      {{-- Comment reply --}}
+
+      <div style="text-align: center; padding-bottom: 30px; ">
+         <h1 style="font-size: 30px; text-align: center; padding-top: 20px; padding-bottom: 20px;">Comments</h1>
+      
+         <form action="">
+            <textarea style="height: 150px; width: 600px;" placeholder="Comment..."></textarea>
+            <br>
+            <a href="" class="btn btn-primary">Comment</a>
+         </form>
+      
+      </div>
+
+      <div style="padding-left: 20%;">
+         <h1 style="font-size: 20px; padding-bottom: 20px;">All Comments</h1>
+         
+
+         <div>
+            <b>Aziz</b>
+            <p>This Is My comment</p>
+
+            <a style="color: blue;" href="javascript::void(0);" onclick="reply(this)">Reply</a>
+         </div>
+
+         
+         <div>
+            <b>Yamin</b>
+            <p>This Is My 1  comment</p>
+
+            <a style="color: blue;" href="javascript::void(0);" onclick="reply(this)">Reply</a>
+         </div>
+
+         
+         <div>
+            <b>Said</b>
+            <p>This Is My  2 comment</p>
+
+            <a style="color: blue;" href="javascript::void(0);" onclick="reply(this)">Reply</a>
+         </div>
+
+         
+      <div style="display: none;" class="replyDiv">
+         <textarea style="height: 100px; width: 500px;" placeholder="Write..."></textarea>
+         <br>
+         <a href="" class="btn btn-primary">Reply</a>
+      </div>
+      
+      </div>
+
+
+      {{-- Comment reply end --}}
+
+      
+
       <!-- subscribe section -->
       @include('home.subscribe')
       <!-- end subscribe section -->
@@ -58,6 +116,15 @@
          
          </p>
       </div>
+
+      <script>
+         function reply(caller)
+         {
+            $('.replyDiv').insertAfter($(caller));
+            $('.replyDiv').show();
+         }
+      </script>
+
       <!-- jQery -->
       <script src="home/js/jquery-3.4.1.min.js"></script>
       <!-- popper js -->
