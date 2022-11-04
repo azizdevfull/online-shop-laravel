@@ -17,6 +17,8 @@ use App\Models\Product;
 use function Ramsey\Uuid\v1;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
+
 use Illuminate\Contracts\Session\Session as SessionSession;
 
 class HomeController extends Controller
@@ -112,7 +114,9 @@ class HomeController extends Controller
 
                 $cart->save();
 
-                return redirect()->back()->with('message', 'Product Added Successfully');
+                Alert::success('Product Added Successfully', 'We have added product to cart');
+
+                return redirect()->back();
                 
             }
 
@@ -155,7 +159,9 @@ class HomeController extends Controller
 
             $cart->save();
             
-            return redirect()->back()->with('message', 'Product Added Successfully');
+            Alert::success('Product Added Successfully', 'We have added product to cart');
+
+            return redirect()->back();
 
 
             }
@@ -184,6 +190,7 @@ class HomeController extends Controller
 
         $cart->delete();
         
+        Alert::warning('Cart Removed Successfully', 'We have remove cart!');
         return redirect()->back();
     }
 
