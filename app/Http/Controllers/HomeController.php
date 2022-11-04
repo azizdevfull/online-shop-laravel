@@ -99,9 +99,20 @@ class HomeController extends Controller
 
                 $cart->quantity=$quantity + $request->quantity;
 
+                if($product->discount_price != null)
+                {
+                
+                    $cart->price = $product->discount_price * $cart->quantity;
+                    
+                }
+                else
+                {
+                    $cart->price = $product->price * $cart->quantity;
+                }
+
                 $cart->save();
 
-                return redirect()->back();
+                return redirect()->back()->with('message', 'Product Added Successfully');
                 
             }
 
@@ -144,7 +155,8 @@ class HomeController extends Controller
 
             $cart->save();
             
-            return redirect()->back();
+            return redirect()->back()->with('message', 'Product Added Successfully');
+
 
             }
         }
