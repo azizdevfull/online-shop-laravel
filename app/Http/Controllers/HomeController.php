@@ -84,8 +84,31 @@ class HomeController extends Controller
 
             $user = Auth::user();
 
+            $userid = $user->id;
+
             $product = Product::find($id);
 
+            $product_exist_id = Cart::where('Product_id', '=', $id)->where('user_id','=',$userid)->get('id')->first();
+
+            if ($product_exist_id) 
+            {
+                
+                $cart = Cart::find($product_exist_id)->first();
+
+                $quantity = $cart->quantity;
+
+                $cart->quantity=$quantity + $request->quantity;
+
+                $cart->save();
+
+                return redirect()->back();
+                
+            }
+
+            else 
+            {
+
+                
             $cart = new Cart;
             
             $cart->name = $user->name; 
@@ -122,8 +145,8 @@ class HomeController extends Controller
             $cart->save();
             
             return redirect()->back();
-            
-        
+
+            }
         }
         else{
             return redirect('login');
