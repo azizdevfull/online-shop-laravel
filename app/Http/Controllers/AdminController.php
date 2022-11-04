@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
-use App\Notifications\SendEmailNotification;
-use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Auth;
+use App\Notifications\SendEmailNotification;
 use Illuminate\Support\Facades\Notification;
 
 // use Barryvdh\DomPDF\PDF;
@@ -16,10 +17,17 @@ class AdminController extends Controller
 {
     public function view_category()
     {
-    
+
+        if(Auth::id()){
         $data = Category::all();
 
         return view('admin.category',compact('data'));
+        }
+        else
+        {
+            return redirect('login');
+        }
+    
     }
     
     public function add_category(Request $request){
@@ -106,7 +114,8 @@ class AdminController extends Controller
 
     public function update_product_confirm(Request $request, $id){
 
-        $product = Product::find($id);
+        if (Auth::id()) {
+            $product = Product::find($id);
 
         $product->title=$request->title;
 
@@ -137,6 +146,12 @@ class AdminController extends Controller
 
         return redirect('/show_product')->with('message', ' Product Updated Successfully');
 
+        }
+        else {
+            return redirect('login');
+        }
+
+       
     }
 
     public function order()
