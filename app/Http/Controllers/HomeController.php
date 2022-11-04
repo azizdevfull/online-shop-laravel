@@ -318,4 +318,22 @@ class HomeController extends Controller
         $reply = Reply::all();
         return view('home.userpage', compact('product','comment','reply'));
     }
+    public function product()
+    {
+        $product = Product::paginate(10);
+        $comment = Comment::orderby('id', 'desc')->get();
+        $reply = Reply::all();
+
+        return view('home.all_product', compact('product','comment','reply'));   
+    }
+
+    public function search_product(Request $request)
+    {
+        $search_text = $request->search;
+        $product = Product::where('title', 'LIKE',"%$search_text%")->orWhere('category', 'LIKE',"$search_text")->paginate(10);
+        $comment = Comment::orderby('id', 'desc')->get();
+        $reply = Reply::all();
+        return view('home.all_product', compact('product','comment','reply'));
+    }
+
 }
