@@ -23,6 +23,16 @@ use Illuminate\Contracts\Session\Session as SessionSession;
 
 class HomeController extends Controller
 {
+    public function __construct()
+    {
+        if(Auth::user()){
+            $id = Auth::user()->id;
+            $cart = Cart::where('user_id', '=', $id)->get();
+            
+        }else{
+            $cart = [];
+        }
+    }
 
     public function index(){
         $product = Product::paginate(10);
@@ -84,8 +94,15 @@ class HomeController extends Controller
     }
     public function product_details($id)
     {
+        if(Auth::user()){
+            $id = Auth::user()->id;
+            $cart = Cart::where('user_id', '=', $id)->get();
+            
+        }else{
+            $cart = [];
+        }
         $product = Product::find($id);
-        return view('home.product_details',compact('product'));
+        return view('home.product_details',compact('product', 'cart'));
     }
 
     public function add_cart(Request $request, $id)
