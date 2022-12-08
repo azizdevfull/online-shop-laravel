@@ -28,9 +28,16 @@ class HomeController extends Controller
         $product = Product::paginate(10);
         $comment = Comment::orderby('id', 'desc')->get();
         $reply = Reply::all();
+        if(Auth::user()){
+            $id = Auth::user()->id;
+            $cart = Cart::where('user_id', '=', $id)->get();
+            
+        }else{
+            $cart = [];
+        }
 
 
-        return view('home.userpage', compact('product','comment','reply'));
+        return view('home.userpage', compact('product','comment','reply', 'cart'));
     }
 
     public function redirect()
@@ -43,6 +50,8 @@ class HomeController extends Controller
             $total_product = Product::all()->count();
             $total_order = Order::all()->count();
             $total_user = User::all()->count();
+            $id = Auth::user()->id;
+            $cart = Cart::where('user_id', '=', $id)->get();
 
             $order = Order::all();
 
@@ -57,7 +66,7 @@ class HomeController extends Controller
 
             $total_processing = Order::where('delivery_status','=','processing')->get()->count();
 
-            return view('admin.home', compact('total_product', 'total_order', 'total_user', 'total_revenue','total_delivered', 'total_processing'));
+            return view('admin.home', compact('total_product', 'total_order', 'total_user', 'total_revenue','total_delivered', 'total_processing', 'cart'));
 
         }
         else
@@ -65,10 +74,11 @@ class HomeController extends Controller
             $product = Product::paginate(10);
             $comment = Comment::orderby('id', 'desc')->get();
             $reply = Reply::all();
+            $id = Auth::user()->id;
+            $cart = Cart::where('user_id', '=', $id)->get();
 
 
-
-        return view('home.userpage', compact('product', 'comment', 'reply'));
+        return view('home.userpage', compact('product', 'comment', 'reply', 'cart'));
         }
 
     }

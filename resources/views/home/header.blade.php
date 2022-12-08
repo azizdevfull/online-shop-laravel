@@ -29,7 +29,12 @@
                         </li>
                         
                         <li class="nav-item">
-                           <a class="nav-link" href="{{ url('show_cart') }}">Cart</a>
+                           <a class="nav-link" href="{{ url('show_cart') }}">Cart 
+                           @if (count($cart) > 0)
+                               
+                           [{{ count($cart) }}]
+                           @endif
+                           </a>
                         </li>
 
                         <li class="nav-item">
