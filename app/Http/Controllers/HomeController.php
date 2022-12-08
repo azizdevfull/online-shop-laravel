@@ -385,7 +385,14 @@ class HomeController extends Controller
         $product = Product::where('title', 'LIKE',"%$search_text%")->orWhere('category', 'LIKE',"$search_text")->paginate(10);
         $comment = Comment::orderby('id', 'desc')->get();
         $reply = Reply::all();
-        return view('home.userpage', compact('product','comment','reply'));
+        if(Auth::user()){
+            $id = Auth::user()->id;
+            $cart = Cart::where('user_id', '=', $id)->get();
+            
+        }else{
+            $cart = [];
+        }
+        return view('home.userpage', compact('product','comment','reply','cart'));
     }
     public function product()
     {
