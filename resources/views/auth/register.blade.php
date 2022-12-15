@@ -30,6 +30,11 @@
             </div>
 
             <div class="mt-4">
+                <x-jet-label for="postal_code" value="{{ __('postal code') }}" />
+                <x-jet-input id="postal_code" class="block mt-1 w-full" type="number" name="postal_code" :value="old('postal_code')" required />
+            </div>
+
+            <div class="mt-4">
                 <x-jet-label for="password" value="{{ __('Password') }}" />
                 <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
             </div>

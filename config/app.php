@@ -182,6 +182,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Axlon\PostalCodeValidation\ValidationServiceProvider::class,
         /*
          * Package Service Providers...
          */
