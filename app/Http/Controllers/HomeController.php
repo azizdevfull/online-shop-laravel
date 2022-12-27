@@ -28,7 +28,7 @@ class HomeController extends Controller
         if(Auth::user()){
             $id = Auth::user()->id;
             $cart = Cart::where('user_id', '=', $id)->get();
-            
+
         }else{
             $cart = [];
         }
@@ -41,7 +41,7 @@ class HomeController extends Controller
         if(Auth::user()){
             $id = Auth::user()->id;
             $cart = Cart::where('user_id', '=', $id)->get();
-            
+
         }else{
             $cart = [];
         }
@@ -97,7 +97,7 @@ class HomeController extends Controller
         if(Auth::user()){
             $id = Auth::user()->id;
             $cart = Cart::where('user_id', '=', $id)->get();
-            
+
         }else{
             $cart = [];
         }
@@ -108,7 +108,7 @@ class HomeController extends Controller
     public function add_cart(Request $request, $id)
     {
         // $product = Product::find($id);
-        if (Auth::id()) 
+        if (Auth::id())
         {
 
             $user = Auth::user();
@@ -119,9 +119,9 @@ class HomeController extends Controller
 
             $product_exist_id = Cart::where('Product_id', '=', $id)->where('user_id','=',$userid)->get('id')->first();
 
-            if ($product_exist_id) 
+            if ($product_exist_id)
             {
-                
+
                 $cart = Cart::find($product_exist_id)->first();
 
                 $quantity = $cart->quantity;
@@ -130,9 +130,9 @@ class HomeController extends Controller
 
                 if($product->discount_price != null)
                 {
-                
+
                     $cart->price = $product->discount_price * $cart->quantity;
-                    
+
                 }
                 else
                 {
@@ -144,22 +144,22 @@ class HomeController extends Controller
                 Alert::success('Product Added Successfully', 'We have added product to cart');
 
                 return redirect()->back();
-                
+
             }
 
-            else 
+            else
             {
 
-                
+
             $cart = new Cart;
-            
-            $cart->name = $user->name; 
-            
-            $cart->email = $user->email; 
-            
-            $cart->phone = $user->phone; 
-            
-            $cart->address = $user->address; 
+
+            $cart->name = $user->name;
+
+            $cart->email = $user->email;
+
+            $cart->phone = $user->phone;
+
+            $cart->address = $user->address;
 
             $cart->user_id = $user->id;
 
@@ -168,9 +168,9 @@ class HomeController extends Controller
 
             if($product->discount_price != null)
             {
-            
+
                 $cart->price = $product->discount_price * $request->quantity;
-                
+
             }
             else
             {
@@ -185,7 +185,7 @@ class HomeController extends Controller
             $cart->quantity = $request->quantity;
 
             $cart->save();
-            
+
             Alert::success('Product Added Successfully', 'We have added product to cart');
 
             return redirect()->back();
@@ -216,7 +216,7 @@ class HomeController extends Controller
         $cart = Cart::find($id);
 
         $cart->delete();
-        
+
         Alert::warning('Cart Removed Successfully', 'We have remove cart!');
         return redirect()->back();
     }
@@ -227,7 +227,7 @@ class HomeController extends Controller
         $userid = $user->id;
 
         $data = cart::where('user_id','=',$userid)->get();
-        
+
         foreach ($data as $data) {
             $order = new Order;
             $order->name = $data->name;
@@ -255,12 +255,19 @@ class HomeController extends Controller
         }
 
         return redirect()->back()->with('message', 'We Received Your Order. We Will Connect With You Soon!');
-        
+
     }
 
     public function stripe($totalprice)
     {
-        return view('home.stripe',compact('totalprice'));
+        if(Auth::user()){
+            $id = Auth::user()->id;
+            $cart = Cart::where('user_id', '=', $id)->get();
+
+        }else{
+            $cart = [];
+        }
+        return view('home.stripe',compact('totalprice', 'cart'));
     }
 
     public function stripePost(Request $request, $totalprice)
@@ -268,12 +275,12 @@ class HomeController extends Controller
 
         // dd($totalprice);
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-    
+
         Stripe\Charge::create ([
                 "amount" => $totalprice * 100,
                 "currency" => "usd",
                 "source" => $request->stripeToken,
-                "description" => "Thanks For Payment." 
+                "description" => "Thanks For Payment."
         ]);
 
 
@@ -281,7 +288,7 @@ class HomeController extends Controller
         $userid = $user->id;
 
         $data = cart::where('user_id','=',$userid)->get();
-        
+
         foreach ($data as $data) {
             $order = new Order;
             $order->name = $data->name;
@@ -310,7 +317,7 @@ class HomeController extends Controller
 
         // Session::flash('success', 'Payment successful!');
         return redirect()->back()->with('success', 'Payment successful!');
-              
+
         // return back();
     }
     public function show_order()
@@ -328,11 +335,11 @@ class HomeController extends Controller
     public function cancel_order($id)
     {
         $order = Order::find($id);
-        
+
         $order->delivery_status = 'You Canceled The Order';
-        
+
         $order->save();
-        
+
         return redirect()->back();
     }
 
@@ -341,11 +348,11 @@ class HomeController extends Controller
         if(Auth::id())
         {
             $comment = new Comment;
-            
+
             $comment->name = Auth::user()->name;
-            
+
             $comment->user_id = Auth::user()->id;
-            
+
             $comment->comment=$request->comment;
 
             $comment->save();
@@ -362,11 +369,11 @@ class HomeController extends Controller
         if(Auth::id())
         {
             $reply = new Reply;
-            
+
             $reply->name = Auth::user()->name;
-            
+
             $reply->user_id = Auth::user()->id;
-            
+
             $reply->comment_id = $request->commentId;
 
             $reply->reply=$request->reply;
@@ -388,7 +395,7 @@ class HomeController extends Controller
         if(Auth::user()){
             $id = Auth::user()->id;
             $cart = Cart::where('user_id', '=', $id)->get();
-            
+
         }else{
             $cart = [];
         }
@@ -400,7 +407,7 @@ class HomeController extends Controller
         $comment = Comment::orderby('id', 'desc')->get();
         $reply = Reply::all();
 
-        return view('home.all_product', compact('product','comment','reply'));   
+        return view('home.all_product', compact('product','comment','reply'));
     }
 
     public function search_product(Request $request)
